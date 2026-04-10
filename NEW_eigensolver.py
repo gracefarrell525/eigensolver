@@ -174,7 +174,7 @@ def assemble_generalized_evp(model: DiskModel, x: np.ndarray) -> tuple[np.ndarra
     return A, B
 
 
-def _normalize_mode(v: np.ndarray, B: np.ndarray) -> np.ndarray:
+def normalize_mode(v: np.ndarray, B: np.ndarray) -> np.ndarray:
     # normalizing modes, returning normalized eigenvectors
 
     v = np.real_if_close(v).astype(float) #removes very small imaginary components
@@ -229,7 +229,7 @@ def solve_modes(
     evals = evals[phys]
     evecs = evecs[:, phys] #shape (nx, nmodes)
 
-    interior_modes = np.array([_normalize_mode(evecs[:, i], B) for i in range(evecs.shape[1])]) #applying normalization
+    interior_modes = np.array([normalize_mode(evecs[:, i], B) for i in range(evecs.shape[1])]) #applying normalization
 
     # reconstruct full modes including boundaries.
     cL1, cL2 = boundary_elimination_coeffs(model, x, "inner")
