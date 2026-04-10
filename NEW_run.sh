@@ -16,9 +16,9 @@ Rout=1.0 #100000 munoz, 1.0 lee
 taper_power=1.0 #0 munoz, 1 lee
 use_outer_taper=true 
 
-# dirichlet --> e0, neumann --> eprime0, robin --> combo
-inner_bc_kind=neumann #combo munoz, eprime0 lee
-outer_bc_kind=neumann #combo munoz, eprime0 lee
+# e0, eprime0, combo
+inner_bc_kind=eprime0 #combo munoz, eprime0 lee
+outer_bc_kind=eprime0 #combo munoz, eprime0 lee
 
 nmodes=10
 ngrid=1000
