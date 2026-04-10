@@ -80,7 +80,7 @@ def phase_integral(model: DiskModel, x: np.ndarray, omega: float) -> tuple[float
         print("Found a candidate, but not enough points to compute integral ):")
         return np.nan, tps
     
-    I = 2.0 * np.trapz(kR[good], lnx[good]) 
+    I = np.trapz(kR[good], lnx[good]) 
     print(I, tps)
     return I, tps
 
