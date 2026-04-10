@@ -45,8 +45,8 @@ class DiskParams:
     # Boundary condition controls for the eigenproblem
     # "robin" (aE + b dE/dr = 0), "neumann" (dE/dr = 0), or "dirichlet" (E(R) = 0)
     # mess around with this and see how boundary conditions effect e-val solns
-    inner_bc_kind: str = "robin"
-    outer_bc_kind: str = "robin"
+    inner_bc_kind: str = "combo"
+    outer_bc_kind: str = "combo"
 
     # If alpha is None, use the Muñoz/Lithwick-style isothermal choice.
     inner_bc_alpha: Optional[float] = None
