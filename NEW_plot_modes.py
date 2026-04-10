@@ -52,13 +52,13 @@ def plot_eccentricity_functions(ax, model, x, omegas, modes):
 
         ax.plot(x, y, lw=1.8, label=f"mode {i}")
 
-        tps = find_turning_points(x, wpot - om)
-        for tp in tps:
-            ax.axvline(tp, ls="--", lw=0.8, color="0.6", alpha=0.5)
+        #tps = find_turning_points(x, wpot - om)
+        #for tp in tps:
+            #ax.axvline(tp, ls="--", lw=0.8, color="0.6", alpha=0.5)
 
         nodes = count_nodes(mode)
         ynodes = np.interp(nodes, x, y)
-        ax.plot(nodes, ynodes, "o", ms=4)
+        #ax.plot(nodes, ynodes, "o", ms=4)
 
     ax.set_xscale("log")
     ax.set_xlabel(r"$R/a_b$")
