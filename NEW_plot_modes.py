@@ -102,7 +102,7 @@ def plot_kR_contour(ax, model, x, omegas, nmodes_to_show=None, nk=500):
     ax.contour(RR, KRR, omega_map, levels=levels, linewidths=0.6, alpha=0.7)
 
     for i, om in enumerate(omegas[:nmodes_to_show]):
-        ax.contour(RR< KRR, omega_map, levels=[om], linewidths=2.0)
+        ax.contour(RR, KRR, omega_map, levels=[om], linewidths=2.0)
 
         I, _ = phase_integral(model, x, om)
 #        if np.isfinite(I):
