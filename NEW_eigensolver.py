@@ -101,10 +101,10 @@ def boundary_elimination_coeffs(model: DiskModel, x: np.ndarray, side: str) -> t
     else:
         raise ValueError("side must be inner or outer")
 
-    if kind == "dirichlet":
+    if kind == "e0":
         return 0.0, 0.0
 
-    alpha = 0.0 if kind == "neumann" else model.boundary_alpha(side, x0)
+    alpha = 0.0 if kind == "eprime0" else model.boundary_alpha(side, x0)
     w = derivative_weights_first(x0, pts)
 
     if side == "inner":
@@ -338,19 +338,19 @@ def check_mode_with_ode(model: DiskModel, x: np.ndarray, omega: float, mode: np.
     onorm = ode_mode / (np.max(np.abs(ode_mode)) + 1e-30)
     shape_error = np.linalg.norm(vnorm - onorm) / np.sqrt(len(x))
 
-    left_alpha = 0.0 if model.par.inner_bc_kind == "neumann" else (model.boundary_alpha("inner", x[0]) if model.par.inner_bc_kind == "robin" else np.nan)
-    right_alpha = 0.0 if model.par.outer_bc_kind == "neumann" else (model.boundary_alpha("outer", x[-1]) if model.par.outer_bc_kind == "robin" else np.nan)
+    left_alpha = 0.0 if model.par.inner_bc_kind == "eprime0" else (model.boundary_alpha("inner", x[0]) if model.par.inner_bc_kind == "combo" else np.nan)
+    right_alpha = 0.0 if model.par.outer_bc_kind == "eprime0" else (model.boundary_alpha("outer", x[-1]) if model.par.outer_bc_kind == "combo" else np.nan)
 
     # approximating E'(x_in) and E'(x_out)
     dleft = float(np.dot(derivative_weights_first(x[0], x[:3]), ode_mode[:3]))
     dright = float(np.dot(derivative_weights_first(x[-1], x[-3:]), ode_mode[-3:]))
 
-    if model.par.inner_bc_kind == "dirichlet":
+    if model.par.inner_bc_kind == "e0":
         left_bc_residual = abs(ode_mode[0])
     else:
         left_bc_residual = abs(dleft + left_alpha * ode_mode[0])
 
-    if model.par.outer_bc_kind == "dirichlet":
+    if model.par.outer_bc_kind == "e0":
         right_bc_residual = abs(ode_mode[-1])
     else:
         right_bc_residual = abs(dright + right_alpha * ode_mode[-1])
