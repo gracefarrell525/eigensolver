@@ -37,8 +37,8 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--taper_power", type=float, default=3.0)
     p.add_argument("--use_outer_taper", type=str, required=True)
 
-    p.add_argument("--inner_bc_kind", type=str, default="robin")
-    p.add_argument("--outer_bc_kind", type=str, default="robin")
+    p.add_argument("--inner_bc_kind", type=str, default="combo")
+    p.add_argument("--outer_bc_kind", type=str, default="combo")
 
     p.add_argument("--nmodes", type=int, default=6)
     p.add_argument("--ngrid", type=int, default=600)
@@ -71,7 +71,7 @@ def main() -> None:
     model = DiskModel(par)
     x = log_grid(par.xin, par.xout, args.ngrid)
 
-    result = solve_modes(model, x, nmodes=args.nmodes, sort_by="nodes_then_omega", check_ode=True) # ascending_omega, nodes_then_omega
+    result = solve_modes(model, x, nmodes=args.nmodes, sort_by="nodes_then_omega", check_ode=True) # ascending_omega, descending_omega, nodes_then_omega
 
     summarize_modes(model, x, result.omegas, result.modes)
 
