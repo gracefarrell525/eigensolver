@@ -3,7 +3,7 @@
 # parameters
 h0=0.1 #0.03 munoz, 0.1 lee
 qb=0.0 #0.9 munoz, 0.0 lee
-beta=0.5 #1.0 munoz, 0.5 lee
+beta=0.5 #1.0 munoz, 0.5 lee (1.25?)
 l0=0.0 #0.7 munoz, 0.0 lee
 
 xin=1.0e-4 #1.875 munoz, 1.0e-4 lee
@@ -20,11 +20,11 @@ use_outer_taper=true
 inner_bc_kind=eprime0 #combo munoz, eprime0 lee
 outer_bc_kind=eprime0 #combo munoz, eprime0 lee
 
-nmodes=10
+nmodes=3
 ngrid=1000
 
 savefig=true
-outfile="lee_more_modes.png"
+outfile="lee_fig_1_trial.png"
 
 # running pipeline file (which calls disk, eigensolver, and plotting files)
 python3 NEW_pipeline.py \

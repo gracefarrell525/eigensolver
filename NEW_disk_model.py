@@ -26,7 +26,7 @@ class DiskParams:
     coeff3D: float = 0.0
 
     l0: float = 0.7 # net torque per unit accreted mass exerted by the CBD on the binary. 0.7 from Munoz Lithwick 2020
-    p: Optional[float] = None # if None, use p = 1.5 - beta
+    p: float = 1 # if None, use p = 1.5 - beta, Optional[float] = None
 
     # Domain
     xin: float = 0.1
@@ -39,7 +39,7 @@ class DiskParams:
 
     # Outer taper controls
     Rout: Optional[float] = None # Rout can either be a float or None
-    taper_power: float = 3.0
+    taper_power: float = 1.0
     use_outer_taper: bool = False
 
     # Boundary condition controls for the eigenproblem
