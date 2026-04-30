@@ -290,19 +290,59 @@ def solve_modes(
 
 # ODE verification, plugging back in solved e-vals
 # E'' + aE' + bE = wcE
-def mode_rhs(model: DiskModel, omega: float):
 
+def mode_rhs_isothermal(model: DiskModel, omega: float):
     beta = model.par.beta
     Q = model.par.Qoverhsq
-
     def rhs(x: float, y: np.ndarray) -> np.ndarray:
         E, dE = y
         L = float(model.SprimeoverS(x))
-        cterm = ((x * L * (1.0 + beta) + beta * (1.0 - beta)) / x**2 + 6.0 * Q * x ** (beta - 5.0))
+        cterm = (
+            (x * L * (1.0 + beta) + beta * (1.0 - beta)) / x**2
+            + 6.0 * Q * x ** (beta - 5.0)
+        )
         ddE = x ** (beta - 1.5) * omega * E - ((x * L + 3.0) / x) * dE - cterm * E
-        return np.array([dE, ddE], dtype=float) #solving for E''
+        return np.array([dE, ddE], dtype=float)
+    return rhs
+    
+def mode_rhs_adiabatic(model: DiskModel, omega: float):
+    def rhs(x: float, y: np.ndarray) -> np.ndarray:
+        E, dE = y
+        # p(x), q(x), r(x) for the normalized Lee branch
+        p = model.S(x) * x**(3.0 - model.par.beta)
+        eps = 1e-6 * x if x > 0.0 else 1e-8
+        xp = x + eps
+        xm = max(x - eps, 1e-12)
+        pp = model.S(xp) * xp**(3.0 - model.par.beta)
+        pm = model.S(xm) * xm**(3.0 - model.par.beta)
+        pprime = (pp - pm) / (xp - xm)
+        sigc2_p = model.S(xp) * xp**(-model.par.beta)
+        sigc2_m = model.S(xm) * xm**(-model.par.beta)
+        dsigc2_dx = (sigc2_p - sigc2_m) / (xp - xm)
+        q = (x**2 / model.par.gamma) * dsigc2_dx
+        r = model.S(x) * x**1.5
+        ddE = -(pprime / p) * dE + ((omega * r - q) / p) * E
+        return np.array([dE, ddE], dtype=float)
+    return rhs
 
-    return rhs #returns function for rhs of equation
+def mode_rhs(model: DiskModel, omega: float):
+    if model.par.isothermal:
+        return mode_rhs_isothermal(model, omega)
+    return mode_rhs_adiabatic(model, omega)
+    
+#def mode_rhs(model: DiskModel, omega: float):
+#
+#    beta = model.par.beta
+#    Q = model.par.Qoverhsq
+#
+#    def rhs(x: float, y: np.ndarray) -> np.ndarray:
+#        E, dE = y
+#        L = float(model.SprimeoverS(x))
+#        cterm = ((x * L * (1.0 + beta) + beta * (1.0 - beta)) / x**2 + 6.0 * Q * x ** (beta - 5.0))
+#        ddE = x ** (beta - 1.5) * omega * E - ((x * L + 3.0) / x) * dE - cterm * E
+#        return np.array([dE, ddE], dtype=float) #solving for E''
+#
+#    return rhs #returns function for rhs of equation
 
 # verification
 def check_mode_with_ode(model: DiskModel, x: np.ndarray, omega: float, mode: np.ndarray) -> dict:

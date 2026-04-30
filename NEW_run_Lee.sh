@@ -4,6 +4,8 @@
 h0=0.1 #0.03 munoz, 0.1 lee
 qb=0.0 #0.9 munoz, 0.0 lee
 beta=0.5 #1.0 munoz, 0.5 lee (1.25?)
+pindex=1.0 #will override beta and therefore p = 1.5-beta
+use_boundary_factor=false #for 1-l0/sqrt(x)
 l0=0.0 #0.7 munoz, 0.0 lee
 
 xin=1.0e-4 #1.875 munoz, 1.0e-4 lee
@@ -20,6 +22,11 @@ use_outer_taper=true
 inner_bc_kind=eprime0 #combo munoz, eprime0 lee
 outer_bc_kind=eprime0 #combo munoz, eprime0 lee
 
+#isothermal, adiabatic
+
+thermo=adiabatic
+gamma=1.5 #1.0 munoz, 1.5 lee
+
 nmodes=3
 ngrid=1000
 
@@ -28,6 +35,10 @@ outfile="lee_fig_1_trial.png"
 
 # running pipeline file (which calls disk, eigensolver, and plotting files)
 python3 NEW_pipeline.py \
+  --thermo "$thermo" \
+  --gamma "$gamma" \
+  --pindex "$pindex" \
+  --use_boundary_factor "$use_boundary_factor" \
   --h0 "$h0" \
   --qb "$qb" \
   --beta "$beta" \

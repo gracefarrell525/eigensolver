@@ -39,6 +39,11 @@ def parse_args() -> argparse.Namespace:
 
     p.add_argument("--inner_bc_kind", type=str, default="combo")
     p.add_argument("--outer_bc_kind", type=str, default="combo")
+    
+    p.add_argument("--thermo", type=str, default="isothermal")
+    p.add_argument("--gamma", type=float, default=1.0)
+    p.add_argument("--pindex", type=float, default=None)
+    p.add_argument("--use_boundary_factor", type=str, default="true")
 
     p.add_argument("--nmodes", type=int, default=6)
     p.add_argument("--ngrid", type=int, default=600)
@@ -66,16 +71,20 @@ def main() -> None:
         use_outer_taper=str2bool(args.use_outer_taper),
         inner_bc_kind=args.inner_bc_kind,
         outer_bc_kind=args.outer_bc_kind,
-    )
+        thermo=args.thermo,
+        gamma=args.gamma,
+        p=args.pindex,
+        use_boundary_factor=str2bool(args.use_boundary_factor)
+        )
 
-    model = DiskModel(par)
-    x = log_grid(par.xin, par.xout, args.ngrid)
+    model = DiskModel(par) 
+    x = log_grid(par.xin, par.xout, args.ngrid) 
 
-    result = solve_modes(model, x, nmodes=args.nmodes, sort_by="nodes_then_omega", check_ode=True) # ascending_omega, descending_omega, nodes_then_omega
+    result = solve_modes(model, x, nmodes=args.nmodes, sort_by="nodes_then_omega", check_ode=True) # ascending_omega, descending_omega, nodes_then_omega 
 
-    summarize_modes(model, x, result.omegas, result.modes)
+    summarize_modes(model, x, result.omegas, result.modes) 
 
-    print("\nVerification checks")
+    print("\nVerification checks") 
     print("=" * 90)
     for i, check in enumerate(result.ode_checks):
         print(

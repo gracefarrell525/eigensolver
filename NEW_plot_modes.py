@@ -17,8 +17,8 @@ def plot_surface_density(ax, model, x):
     ax.set_ylabel(r"$\Sigma(R)$")
     ax.set_title("Surface density profile")
     
-    ax.set_xlim(5e-2, 50) #PLT 1 DOMAIN
-    ax.set_ylim(1e-6, 250) #PLT 1 RANGE
+    ax.set_xlim(0.05, 14) #PLT 1 DOMAIN (munoz: 1, 50, lee: 0.05, 14)
+    ax.set_ylim(1e-6, 100) #PLT 1 RANGE (munoz: 0.01, 0.5, lee: 1e-6, 100)
 
     if model.par.has_cavity_in_domain():
         ax.axvline(model.par.Rcav, ls="--", lw=1.0, color="k", alpha=0.6)
@@ -39,8 +39,8 @@ def plot_omega_potential(ax, model, x, omegas):
     ax.set_title(r"$\omega_{\rm pot}$ vs $R/a_b$")
     ax.legend(frameon=False, fontsize=8)
     
-    ax.set_xlim(5e-2, 50) #PLT 2 DOMAIN
-    ax.set_ylim(-7, 3) #PLT 2 RANGE
+    ax.set_xlim(0.05, 14) #PLT 2 DOMAIN (munoz: 1, 10, lee: 0.05, 14)
+    ax.set_ylim(-7, 3) #PLT 2 RANGE (munoz: -15, 35, lee: -7, 3)
 
 
 def plot_eccentricity_functions(ax, model, x, omegas, modes):
@@ -66,8 +66,8 @@ def plot_eccentricity_functions(ax, model, x, omegas, modes):
     ax.set_title("Eccentricity functions")
     ax.legend(frameon=False, fontsize=8)
     
-    ax.set_xlim(1, 50) #PLT 3 DOMAIN
-    ax.set_ylim(1e-5, 2) #PLT 3 RANGE
+    ax.set_xlim(1.5, 50) #PLT 3 DOMAIN (munoz: 1.5, 50, lee: )
+    ax.set_ylim(1e-5, 3) #PLT 3 RANGE (munoz: 1e-5, 3, lee: )
 
 
 def plot_kR_contour(ax, model, x, omegas, nmodes_to_show=None, nk=500):
@@ -119,8 +119,8 @@ def plot_kR_contour(ax, model, x, omegas, nmodes_to_show=None, nk=500):
     ax.set_ylim(-kR_max, kR_max)
     ax.set_title(r"$kR$ contour plot")
     
-    ax.set_xlim(5e-2, 50) #PLT 4 DOMAIN
-    ax.set_ylim(-7, 7) #PLT 4 RANGE
+    ax.set_xlim(0.05, 14) #PLT 4 DOMAIN (munoz: 1, 10, lee: 0.05, 14)
+    ax.set_ylim(-7, 7) #PLT 4 RANGE (munoz: -15, 15, lee: -7, 7)
 
 
 def summarize_modes(model, x, omegas, modes):
