@@ -61,13 +61,14 @@ def plot_eccentricity_functions(ax, model, x, omegas, modes):
         #ax.plot(nodes, ynodes, "o", ms=4)
 
     ax.set_xscale("log")
+    ax.set_yscale("log")
     ax.set_xlabel(r"$R/a_b$")
-    ax.set_ylabel(r"$|E|/|E|_{\max}$")
+    ax.set_ylabel(r"$|E|$")
     ax.set_title("Eccentricity functions")
     ax.legend(frameon=False, fontsize=8)
     
-    ax.set_xlim(1.5, 50) #PLT 3 DOMAIN (munoz: 1.5, 50, lee: )
-    ax.set_ylim(1e-5, 3) #PLT 3 RANGE (munoz: 1e-5, 3, lee: )
+    ax.set_xlim(0.001, 50) #PLT 3 DOMAIN (munoz: 1.5, 50, lee: 0.001, 50)
+    ax.set_ylim(0.0, 1.5) #PLT 3 RANGE (munoz: 1e-5, 3, lee: 0.0, 1.5)
 
 
 def plot_kR_contour(ax, model, x, omegas, nmodes_to_show=None, nk=500):

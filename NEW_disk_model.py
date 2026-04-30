@@ -58,7 +58,6 @@ class DiskParams:
     @property # makes a method behave like a variable
     def isothermal(self) -> bool:
         return self.thermo.lower() == "isothermal"
-        # defines a computed attribute called isothermal. Returns true is gamma = 1, else false. np.isclose avoids floating-point issues. self.gamma means the gamma value stored in this object
     
     @property
     def is_adiabatic(self) -> bool:
@@ -78,7 +77,6 @@ class DiskParams:
 
     def has_taper_in_domain(self) -> bool:
         # true only when I want a taper and taper radius is inside domain
-    
         return self.use_outer_taper and (self.Rout is not None) and (self.Rout < self.xout)
 
 class DiskModel:
@@ -88,7 +86,7 @@ class DiskModel:
         self.par = params #store the input of params inside this object as self.par
         # __init__ runs automatically when I create an object, the constructor of the class.
         # self is the actual object I just created (made myself a disk :))
-        #params: DiskParams means params should be an object of type DiskParams
+        # params: DiskParams means params should be an object of type DiskParams
          
     def c2(self, x: ArrayLike) -> ArrayLike:
         x = np.asarray(x, dtype=float)
@@ -105,7 +103,6 @@ class DiskModel:
     def Omega(self, x: ArrayLike) -> ArrayLike:
         x = np.asarray(x, dtype=float)
         return self.par.Omega0 * x ** (-1.5)
-
    
     def cavity_factor(self, x: ArrayLike) -> ArrayLike:
         x = np.asarray(x, dtype=float)
@@ -245,7 +242,7 @@ class DiskModel:
         x = np.asarray(x, dtype=float)
         return self.SprimeprimeoverS(x) + 2.0 * self.SprimeoverS(x) * self.c2primeoverc2(x) + self.c2primeprimeoverc2(x)
     
-    def omegap_isothermal(self, x: ArrayLike) -> ArrayLike:
+    def omegap_isothermal(self, x: ArrayLike) -> ArrayLike: # separated isothermal
         x = np.asarray(x, dtype=float)
         beta = self.par.beta
         return -x ** (-beta - 0.5) * (
@@ -259,7 +256,7 @@ class DiskModel:
             + self.par.coeff3D * (3.0 + 1.5 * x * self.c2primeoverc2(x))
         )
     
-    def omegap_adiabatic(self, x: ArrayLike) -> ArrayLike:
+    def omegap_adiabatic(self, x: ArrayLike) -> ArrayLike: # separated adiabatic
         x = np.asarray(x, dtype=float)
         beta = self.par.beta
         return -x ** (-beta - 0.5) * (
@@ -270,7 +267,7 @@ class DiskModel:
             - 6.0 * x ** (beta - 3.0) * self.par.Qoverhsq
         )
         
-    def omegap(self, x: ArrayLike) -> ArrayLike:
+    def omegap(self, x: ArrayLike) -> ArrayLike: #choice between iso. and adia.
         x = np.asarray(x, dtype=float)
         if self.par.isothermal:
             return self.omegap_isothermal(x)
@@ -302,9 +299,8 @@ class DiskModel:
 #        )
 
     def default_robin_alpha(self, x: float) -> float:
-
         if self.par.isothermal:
-            return self.c2primeoverc2(x) # changed from -""
+            return self.c2primeoverc2(x)
         return 0.0
 
     def boundary_alpha(self, side: str, x: float) -> float:
@@ -316,6 +312,7 @@ class DiskModel:
             raise ValueError("side must be 'inner' or 'outer'")
         return self.default_robin_alpha(x) if alpha is None else float(alpha)
 
+    # separated p, q, and r for iso. and adia.
     def p_flux_isothermal(self, x: ArrayLike) -> ArrayLike:
         x = np.asarray(x, dtype=float)
         return x**3 * np.maximum(self.S(x), 1e-300)

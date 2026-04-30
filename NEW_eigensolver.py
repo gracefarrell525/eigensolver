@@ -125,7 +125,7 @@ def assemble_generalized_evp(model: DiskModel, x: np.ndarray) -> tuple[np.ndarra
     if n < 5:
         raise ValueError("Need at least 5 grid points.")
     
-    #(pE')' + qE = omega r E
+    #(pE')' + qE = omega r E, now sensitive to iso. adia. choices
     p = model.p_flux(x)
     q = model.q_potential(x)
     r = model.r_weight(x)
@@ -300,7 +300,7 @@ def mode_rhs_isothermal(model: DiskModel, omega: float):
         cterm = (
             (x * L * (1.0 + beta) + beta * (1.0 - beta)) / x**2
             + 6.0 * Q * x ** (beta - 5.0)
-        )
+        ) # background profile gradients and sound-speed slope, forcing term with Q
         ddE = x ** (beta - 1.5) * omega * E - ((x * L + 3.0) / x) * dE - cterm * E
         return np.array([dE, ddE], dtype=float)
     return rhs
